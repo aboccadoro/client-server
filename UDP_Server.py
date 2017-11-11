@@ -20,12 +20,12 @@ modifiedMessage = ""
 status = ""
 
 print ("The UDP server is ready\n")
-while (modifiedMessage != "Server is shutting down..."):
+while (modifiedMessage != "[200 OK] Server is shutting down..."):
 	#Step 3. Listening to the socket
 	message, clientAddress = serverSocket.recvfrom(2048)
 	#Step 4. Implementing UDP unreliability by accepting requests with probability .5
 	if (random.random() > 0.49):
-		print ("-->> At Server received message is: '" + message.decode() + "'")
+		print ("-->> Client request: '" + message.decode() + "'")
 		print (" -->> clientAddress is: ", str(clientAddress[0]) + "/" + str(clientAddress[1]))
 		modifiedMessage = message.decode()
 		if (modifiedMessage != "quit"):
@@ -41,26 +41,26 @@ while (modifiedMessage != "Server is shutting down..."):
 					#Step 8. Valid
 					if (result != -1):
 						status = "200 OK"
-						modifiedMessage = str(result)
+						modifiedMessage = "[" + status + "] " + str(result)
 					#Step 7. Invalid: divide by zero
 					else: 
 						status = "300"
-						modifiedMessage = "I can't compute that!"
+						modifiedMessage = "[" + status + "] " + str(result)
 				#Step 7. Invalid: incorrect number input
 				else:
 					status = "300"
-					modifiedMessage = "I can't compute that!"
+					modifiedMessage = "[" + status + "] " + str(result)
 			#Step 7. Invalid: general incorrect input (specifically amount of words)
 			else:
 				status = "300"
-				modifiedMessage = "I can't compute that!"
-			print ("<<-- [" + status + "] At Server response to send back: '" + modifiedMessage + "'\n")
+				modifiedMessage = "[" + status + "] " + str(result)
+			print ("<<-- [" + status + "] Server response: '" + modifiedMessage + "'\n")
 			serverSocket.sendto(modifiedMessage.encode(), clientAddress)
 		#Step 8. Valid
 		else:
 			status = "200 OK"
-			modifiedMessage = "Server is shutting down..."
-			print ("<<-- [" + status + "] At Server response to send back: '" + modifiedMessage + "'\n")
+			modifiedMessage = "[" + status + "] " + "Server is shutting down..."
+			print ("<<-- [" + status + "] Server response: '" + modifiedMessage + "'\n")
 			serverSocket.sendto(modifiedMessage.encode(), clientAddress)
 
 
