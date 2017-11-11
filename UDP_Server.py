@@ -18,13 +18,26 @@ the client and the status code that was generated.
 '''
 modifiedMessage = ""
 status = ""
+rate = 0.5
 
 print ("The UDP server is ready\n")
+
+#Extra credit
+message, clientAddress = serverSocket.recvfrom(2048)
+probability = message.decode().split(" ")
+if (len(probability) == 1 and is_number(probability[0])):
+	rate = float(probability[0])
+	modifiedMessage = "'[200 OK] Loss rate set to " + str(rate) + "'"
+	serverSocket.sendto(modifiedMessage.encode(), clientAddress)
+else:
+	modifiedMessage = "'[300] Loss rate not accepted, default value 0.5 set'"
+	serverSocket.sendto(modifiedMessage.encode(), clientAddress)
+
 while (modifiedMessage != "[200 OK] Server is shutting down..."):
 	#Step 3. Listening to the socket
 	message, clientAddress = serverSocket.recvfrom(2048)
-	#Step 4. Implementing UDP unreliability by accepting requests with probability .5
-	if (random.random() > 0.49):
+	#Step 4. Implementing UDP unreliability by accepting requests with probability rate
+	if (random.random() > rate):
 		print ("-->> Client request: '" + message.decode() + "'")
 		print (" -->> clientAddress is: ", str(clientAddress[0]) + "/" + str(clientAddress[1]))
 		modifiedMessage = message.decode()
@@ -49,11 +62,11 @@ while (modifiedMessage != "[200 OK] Server is shutting down..."):
 				#Step 7. Invalid: incorrect number input
 				else:
 					status = "300"
-					modifiedMessage = "[" + status + "] " + str(result)
+					modifiedMessage = "[" + status + "]"
 			#Step 7. Invalid: general incorrect input (specifically amount of words)
 			else:
 				status = "300"
-				modifiedMessage = "[" + status + "] " + str(result)
+				modifiedMessage = "[" + status + "]"
 			print ("<<-- [" + status + "] Server response: '" + modifiedMessage + "'\n")
 			serverSocket.sendto(modifiedMessage.encode(), clientAddress)
 		#Step 8. Valid

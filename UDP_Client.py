@@ -14,6 +14,16 @@ Opening a UDP socket.
 '''
 clientSocket = socket(AF_INET, SOCK_DGRAM)
 
+rate = input("Packet loss rate x < [0.00, 1.00] (anything else is 0.5): ")
+clientSocket.sendto(rate.encode(), (serverName, serverPort))
+modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
+query = re.search('\[.+\]', modifiedMessage.decode())
+status = query.group(0)
+if (status == "[200 OK]"):
+	print ("<<-- Server response: '" + modifiedMessage.decode() + "'")
+elif (status == "[300]"):
+	print ("<<-- Server response: '" + modifiedMessage.decode() + "'")
+
 message = ""
 while (message != "quit"):
 	#Step 1. read in input from the user by keyboard and print to console
@@ -30,15 +40,14 @@ while (message != "quit"):
 			#Step 5. a reply is received 
 			clientSocket.settimeout(d)
 			modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
-			modifiedMessage = modifiedMessage.decode()
-			query = re.search('\[.+\]', modifiedMessage)
+			query = re.search('\[.+\]', modifiedMessage.decode())
 			status = query.group(0)
 			#Step 6. status code is 200 OK
 			if (status == "[200 OK]"):
-				print ("<<-- Server response: '" + modifiedMessage + "'")
+				print ("<<-- Server response: '" + modifiedMessage.decode() + "'")
 			#Step 7. status code is 300
 			elif (status == "[300]"):
-				print ("<<-- Server response: '" + modifiedMessage + "' -Warning: invalid operation.")
+				print ("<<-- Server response: '" + modifiedMessage.decode() + "' -Warning: invalid operation.")
 			clientSocket.settimeout(None)
 			break
 		except timeout:
