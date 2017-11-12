@@ -27,6 +27,10 @@ message, clientAddress = serverSocket.recvfrom(2048)
 probability = message.decode().split(" ")
 if (len(probability) == 1 and is_number(probability[0])):
 	rate = float(probability[0])
+	if (rate < 0.0):
+		rate = 0.0
+	elif (rate > 1.0):
+		rate = 1.0
 	modifiedMessage = "'[200 OK] Loss rate set to " + str(rate) + "'"
 	serverSocket.sendto(modifiedMessage.encode(), clientAddress)
 else:

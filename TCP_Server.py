@@ -7,7 +7,7 @@ Specify an arbitrary, valid port number and create a socket
 to bind the address information. Begin listening to the
 socket.
 '''
-serverPort = 55000
+serverPort = 60000
 serverSocket = socket(AF_INET, SOCK_STREAM)
 serverSocket.bind(('127.0.0.1', serverPort))
 serverSocket.listen(1)
@@ -60,7 +60,6 @@ while (modifiedMessage != "[200 OK] Server is shutting down..."):
 		modifiedMessage = "[" + status + "] " + "Server is shutting down..."
 		print ("<<-- [" + status + "] Server response: '" + modifiedMessage + "'\n")
 		conn.sendto(modifiedMessage.encode(), addr)
-		conn.close()
 
 
 print (" ++++   Server Program Ends   ++++\n")

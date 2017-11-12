@@ -5,8 +5,8 @@ import re
 Variables representing the server name and arbitrary,
 valid port number.
 '''
-serverName = '127.0.0.1'
-serverPort = 55000
+serverName = input("\nServer IP: ")
+serverPort = 60000
 '''
 Step 2. Open a TCP socket to the server
 '''
@@ -18,7 +18,10 @@ message = ""
 while (message != "quit"):
 	#Step 1. read in input from the user by keyboard and print to console
 	message = input("\nEnter a valid mathematical expression or \"quit\" to exit: ")
-	print ("\n")
+	#TCP can't send/receive 0 bytes
+	if (message == ''):
+		print ("\nYou can't send nothing over TCP!")
+		continue
 	print ("-->> Client request: '" + message + "'")
 	#Step 3. Send the request to the server
 	clientSocket.sendto(message.encode(), (serverName, serverPort))

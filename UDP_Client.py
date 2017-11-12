@@ -19,7 +19,7 @@ clientSocket.sendto(rate.encode(), (serverName, serverPort))
 modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
 query = re.search('\[.+\]', modifiedMessage.decode())
 status = query.group(0)
-if (status == "[200 OK]"):
+if (status == "[200 OK]" or status == "[300]"):
 	print ("<<-- Server response: '" + modifiedMessage.decode() + "'")
 elif (status == "[300]"):
 	print ("<<-- Server response: '" + modifiedMessage.decode() + "'")
