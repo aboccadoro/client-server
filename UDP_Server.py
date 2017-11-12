@@ -42,11 +42,10 @@ while (modifiedMessage != "[200 OK] Server is shutting down..."):
 		print (" -->> clientAddress is: ", str(clientAddress[0]) + "/" + str(clientAddress[1]))
 		modifiedMessage = message.decode()
 		if (modifiedMessage != "quit"):
-			#Step 5. Parsing the request by spaces accepting the format 'x1 op x2'
+			#Step 5. Parsing the request by spaces accepting the format 'x1 oc x2'
 			instr = modifiedMessage.split(" ")
 			if (len(instr) == 3):
 				x1 = instr[0]
-				op = instr[1]
 				x2 = instr[2]
 				#Step 6. Checking the validity of the input
 				if (is_number(x1) and is_number(x2)):
@@ -67,13 +66,13 @@ while (modifiedMessage != "[200 OK] Server is shutting down..."):
 			else:
 				status = "300"
 				modifiedMessage = "[" + status + "]"
-			print ("<<-- [" + status + "] Server response: '" + modifiedMessage + "'\n")
+			print ("<<-- Server response: '" + modifiedMessage + "'\n")
 			serverSocket.sendto(modifiedMessage.encode(), clientAddress)
 		#Step 8. Valid
 		else:
 			status = "200 OK"
 			modifiedMessage = "[" + status + "] " + "Server is shutting down..."
-			print ("<<-- [" + status + "] Server response: '" + modifiedMessage + "'\n")
+			print ("<<-- Server response: '" + modifiedMessage + "'\n")
 			serverSocket.sendto(modifiedMessage.encode(), clientAddress)
 
 
